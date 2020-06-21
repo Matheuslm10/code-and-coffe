@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, Image, Text, AsyncStorage, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Image, Text, AsyncStorage, TouchableOpacity } from 'react-native';
+
+import SpotList from '../components/SpotList';
 
 import logo from '../assets/logo.png';
 
@@ -11,10 +13,10 @@ export default function List({ navigation }) {
             let techsArray = [];
 
             if (storagedTechs && storagedTechs !== '') {
-               techsArray = storagedTechs.split(',').map(tech => tech.trim());
+                techsArray = storagedTechs.split(',').map(tech => tech.trim());
             }
-            
-            if (techsArray.length > 0) 
+
+            if (techsArray.length > 0)
                 setTechs(techsArray);
         })
     }, []);
@@ -26,20 +28,28 @@ export default function List({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container} >
-            <Image source={logo} style={styles.logo}/>
-            <Text>{techs.length > 0 ? techs : 'Não existem tecnologias.'}</Text>
-            <TouchableOpacity onPress={handleLogOut} style={styles.button}>
+            <Image source={logo} style={styles.logo} />
+
+            <ScrollView>
+                {techs.length > 0
+                    ? (techs.map(tech => <SpotList key={tech} tech={tech} />))
+                    : (<Text>Não existem tecnologias.</Text>)
+                }
+            </ScrollView>
+            
+            {/* <TouchableOpacity onPress={handleLogOut} style={styles.button}>
                 <Text style={styles.buttonText}>LogOut</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+
         </SafeAreaView>
     )
 }
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
     container: {
         flex: 1
     },
-    
+
     logo: {
         height: 32,
         resizeMode: "contain",
